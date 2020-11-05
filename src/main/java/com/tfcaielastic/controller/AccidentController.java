@@ -21,23 +21,23 @@ public class AccidentController {
 	@Inject
 	private IAccidentService accidentsService;
 	
-	@GetMapping(value = "/api/elastic/accidents_by_date")
+	@GetMapping(value = "/api/accidents_by_date")
 	public ResponseEntity<?> getAccidentsByDate(@RequestBody AccidentRequestDTO request) {
 		ResponseEntity<?> response = null;
 		Collection<AccidentDTO> result = new ArrayList<AccidentDTO>();
 		result.addAll(this.getAccidentsService().getAccidentsByDate(request.getDesde(), request.getHasta()));
 		response = ResponseEntity.ok(result);
-
+		
 		return response;
 	}	
 	
-	@GetMapping(value = "/api/elastic/accidents_by_common_features")
+	@GetMapping(value = "/api/accidents_by_common_features")
 	public ResponseEntity<?> getAccidentsByCommonFeatures() {
 		ResponseEntity<?> response = ResponseEntity.ok(this.getAccidentsService().getAccidentsByCommonFeatures());
 		return response;
 	}
 	
-	@GetMapping(value = "/api/elastic/accidents_by_location")
+	@GetMapping(value = "/api/accidents_by_location")
 	public ResponseEntity<?> getAccidentsByLocation(@RequestBody AccidentRequestDTO request) {
 		ResponseEntity<?> response = null;
 		Collection<AccidentDTO> result = new ArrayList<AccidentDTO>();
@@ -47,7 +47,7 @@ public class AccidentController {
 		return response;
 	}
 	
-	@GetMapping(value = "/api/elastic/accidents_by_average_distance")
+	@GetMapping(value = "/api/accidents_by_average_distance")
 	public ResponseEntity<?> getAccidentsByAverageDistance() {
 		ResponseEntity<?> response = null;
 		Collection<DistanceDTO> result = new ArrayList<DistanceDTO>();

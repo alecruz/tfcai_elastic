@@ -3,8 +3,6 @@ package com.tfcaielastic.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
-import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 @Document(indexName = "accidentes")
 public class Accident {
@@ -24,18 +22,20 @@ public class Accident {
 	@Field("@timestamp")
 	private String date;
 	
-	@GeoPointField
-	private GeoPoint start_location;
+	//@GeoPointField
+	//private GeoPoint start_location;
 	
-	public double distance;
+	/*@Field("start_location")
+	private double[] start_location;*/
 	
-	public Accident(String id, String identificador, String city, String state, String date, GeoPoint start_location) {
+	private double distance;
+	
+	public Accident(String id, String identificador, String city, String state, String date) {
 		this.setId(id);
 		this.setIdentificador(identificador);
 		this.setCity(city);
 		this.setState(state);
 		this.setDate(date);
-		this.setStart_location(start_location);
 	}	
 	
 	public String getId() {
@@ -68,8 +68,8 @@ public class Accident {
 
 	public void setState(String state) {
 		this.state = state;
-	}
-
+	}	
+	
 	public String getDate() {
 		return date;
 	}
@@ -78,13 +78,14 @@ public class Accident {
 		this.date = date;
 	}
 
-	public GeoPoint getStart_location() {
+	/*public GeoPoint getStart_location() {
 		return start_location;
 	}
 
 	public void setStart_location(GeoPoint start_location) {
 		this.start_location = start_location;
-	}
+	}*/
+		
 	
 	public double getDistance() {
 		return distance;

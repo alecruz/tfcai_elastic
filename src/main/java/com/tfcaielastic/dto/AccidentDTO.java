@@ -4,13 +4,15 @@ import com.tfcaielastic.model.Accident;
 
 public class AccidentDTO {
 	
-	public String id;
+	private String id;
 	
-	public String identificador;
+	private String identificador;
 	
-	public String city;
+	private String city;
 	
-	public String state;
+	private String state;
+	
+	private String start_time;
 	
 	public AccidentDTO() {}
 	
@@ -19,6 +21,7 @@ public class AccidentDTO {
 		this.setCity(anAccident.getCity());
 		this.setIdentificador(anAccident.getIdentificador());
 		this.setState(anAccident.getState());
+		this.setStart_time(anAccident.getDate());
 	}
 	
 	public String getId() {
@@ -51,6 +54,14 @@ public class AccidentDTO {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public String getStart_time() {
+		return start_time;
+	}
+
+	public void setStart_time(String start_time) {
+		this.start_time = start_time;
 	}
 	
 }

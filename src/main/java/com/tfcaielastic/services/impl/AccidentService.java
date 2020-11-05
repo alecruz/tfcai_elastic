@@ -47,7 +47,8 @@ public class AccidentService implements IAccidentService {
 	public List<AccidentDTO> getAccidentsByDate(String desde, String hasta) {		
 		List<AccidentDTO> result = new ArrayList<AccidentDTO>();
 		this.getAccidentRepository().findByDateBetween(desde, hasta).stream().map(a -> new AccidentDTO(a))
-			.collect(Collectors.toCollection(() -> result));		
+			.collect(Collectors.toCollection(() -> result));	
+		System.out.println("#################: " + result.size());
 		return result;
 	}		
 	
@@ -79,95 +80,7 @@ public class AccidentService implements IAccidentService {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		return common;
-		/*try {			
-			
-		QueryBuilder qb = QueryBuilders.boolQuery().must(QueryBuilders.matchAllQuery());
-		
-		SearchSourceBuilder ssb = new SearchSourceBuilder();
-		ssb.query(qb);
-		ssb.size(3000000);		
-		
-		SearchRequest searchRequest = new SearchRequest();				
-		searchRequest.indices("accidentes");
-		searchRequest.source(ssb);	
-		
-		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-		System.out.println("######## " + searchResponse.getHits().getTotalHits());
-		
-		
-		/*		
-		 * 
-		 * QueryBuilder queryBuilder = QueryBuilders.boolQuery()
-			      .must(QueryBuilders.termQuery("City", "Dayton"));
-		client.search(searchRequest, options)(queryBuilder, Accident.class);
-		
-			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-			SearchRequest searchRequest = new SearchRequest();				
-			searchSourceBuilder.query(queryBuilder);
-			searchSourceBuilder.size(3000000);			
-			searchRequest.indices("accidentes");
-			searchRequest.source(searchSourceBuilder);	
-			
-			Page<Accident> res = (Page<Accident>) this.accidentRepository.search(queryBuilder);
-			
-			System.out.println("######## " + res.getTotalElements());*/
-			
-			//SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-			
-			//System.out.println("######## " + searchResponse.getHits().getTotalHits());
-		    
-		/*SearchRequest searchRequest = new SearchRequest();
-				
-		
-		BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery()				
-				.must(QueryBuilders.matchAllQuery());
-		
-		searchSourceBuilder.query(boolQueryBuilder);
-		searchSourceBuilder.scriptField("distance", new )
-		
-		//searchSourceBuilder.query(QueryBuilders.scriptQuery(new Script(ScriptType.INLINE,  "distance", "(doc['Distance(mi)'].value * 1609.34) / 2", Collections.emptyMap())));
-		
-		searchSourceBuilder.size(3000000);			
-		searchRequest.indices("accidentes");
-		searchRequest.source(searchSourceBuilder);	
-		
-		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-		
-		System.out.println("######## " + searchResponse.getHits().getTotalHits());*/
-			
-		
-	//	SearchResponse response = client().prepareSearch()
-		//	    .setQuery(matchAllQuery())
-		//	    .addScriptField("result", new Script(ScriptType.INLINE, "groovy", "doc['field1'].value / doc['field2'].value", Collections.emptyMap()))
-			    
-			    
-		//SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-
-		//BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchAllQuery());
-		
-		//QueryBuilder qb = QueryBuilders.boolQuery().must(QueryBuilders.matchAllQuery());
-		//NativeSearchQuery nsq = new NativeSearchQueryBuilder()
-				//.withQuery(matchQuery)
-				
-		
-		/*searchSourceBuilder.query(boolQueryBuilder);
-		searchSourceBuilder.size(3000000);			
-		searchRequest.indices("accidentes");
-		searchRequest.source(searchSourceBuilder);			
-		
-		SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
-		
-		System.out.println("######## " + searchResponse.getHits().getTotalHits());
-		
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}*/
-		
-		
-		
+		return common;		
 	}
 	
 	@Override		
@@ -199,12 +112,14 @@ public class AccidentService implements IAccidentService {
 				accident.setIdentificador(sh.getSourceAsMap().get("ID").toString());
 				accident.setCity(sh.getSourceAsMap().get("City").toString());
 				accident.setState(sh.getSourceAsMap().get("State").toString());
+				accident.setStart_time(sh.getSourceAsMap().get("@timestamp").toString());
 				result.add(accident);
 			}	
 		} 		
 		catch (IOException e) {
 			e.printStackTrace();
 		}			
+		System.out.println("#################: " + result.size());
 		return result;
 	}
 		
