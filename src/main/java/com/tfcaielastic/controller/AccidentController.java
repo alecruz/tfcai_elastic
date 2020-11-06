@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tfcaielastic.dto.AccidentDTO;
 import com.tfcaielastic.dto.AccidentRequestDTO;
 import com.tfcaielastic.dto.DistanceDTO;
+import com.tfcaielastic.dto.Point;
 import com.tfcaielastic.services.IAccidentService;
 
 @RestController
@@ -44,6 +45,16 @@ public class AccidentController {
 		result.addAll(this.getAccidentsService().getAccidentsByLocation(request.getLat(), request.getLon(), request.getRatio()));
 		response = ResponseEntity.ok(result);
 
+		return response;
+	}
+	
+	@GetMapping(value = "/api/accidents_by_dangerous_points1")
+	public ResponseEntity<?> getAccidentsByDangerousPoints(@RequestBody AccidentRequestDTO request) {
+		ResponseEntity<?> response = null;
+		Collection<Point> result = new ArrayList<Point>();
+		result.addAll(this.getAccidentsService().getAccidentsByDangerousPoints1(request.getRatio(), request.getPoints()));
+		response = ResponseEntity.ok(result);
+		
 		return response;
 	}
 	

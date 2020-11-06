@@ -1,16 +1,20 @@
 package com.tfcaielastic.dto;
 
+import java.util.List;
+
 public class AccidentRequestDTO {
 		
-	public String desde;
+	private String desde;
 	
-	public String hasta;
+	private String hasta;
 
-	public double lat;
+	private double lat;
 	
-	public double lon;
+	private double lon;
 	
-	public double ratio;
+	private double ratio;
+	
+	private List<Point> points;
 	
 	public String getDesde() {
 		return desde;
@@ -51,5 +55,13 @@ public class AccidentRequestDTO {
 	public void setRatio(double ratio) {
 		this.ratio = ratio;
 	}	
+	
+	public List<Point> getPoints() {
+		return points;
+	}
+
+	public void setPoints(List<Point> points) {
+		this.points = points;
+	}
 	
 }

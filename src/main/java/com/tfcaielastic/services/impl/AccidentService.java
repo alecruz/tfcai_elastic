@@ -30,6 +30,7 @@ import com.tfcaielastic.dto.AccidentDTO;
 import com.tfcaielastic.dto.CommonDTO;
 import com.tfcaielastic.dto.DistanceDTO;
 import com.tfcaielastic.dto.Feature;
+import com.tfcaielastic.dto.Point;
 import com.tfcaielastic.repository.AccidentRepository;
 import com.tfcaielastic.services.IAccidentService;
 
@@ -123,6 +124,48 @@ public class AccidentService implements IAccidentService {
 		return result;
 	}
 		
+	public List<Point> getAccidentsByDangerousPoints1(double ratio, List<Point> points) {	
+		
+		try {
+			SearchRequest searchRequest;
+			SearchSourceBuilder searchSourceBuilder;
+			GeoDistanceQueryBuilder qb;
+			BoolQueryBuilder boolQueryBuilder;
+			
+			for(Point p: points) {
+				
+				searchRequest = new SearchRequest();
+				searchSourceBuilder = new SearchSourceBuilder();
+				
+				//Consulta para la geolocalziación
+				qb = QueryBuilders.geoDistanceQuery("start_location").point(p.getLat(), p.getLon()).distance(ratio, DistanceUnit.KILOMETERS);
+				
+				//Creo la consulta con el filtro de la geolocalizacion
+				boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchAllQuery()).filter(qb);
+											
+				searchSourceBuilder.query(boolQueryBuilder);
+				searchSourceBuilder.size(3000000);			
+				searchRequest.indices("accidentes");
+				searchRequest.source(searchSourceBuilder);	
+				
+				////Por cada punto ingresado por el usuario cuento la cantidad de accidentes teniendo en cuenta el radio
+				p.setAccidents((int)client.search(searchRequest, RequestOptions.DEFAULT).getHits().getTotalHits().value);			
+				
+			}
+			
+			//Ordeno la colección de forma descendente
+			Collections.sort(points);
+			
+			//Retorno solo los primeros 5 elementos
+			return points.stream().limit(5).collect(Collectors.toList());
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
 	@Override
 	public List<DistanceDTO> getAccidentsByAverageDistance() {
 		List<DistanceDTO> result = new ArrayList<DistanceDTO>();		

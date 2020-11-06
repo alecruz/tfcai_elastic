@@ -5,6 +5,7 @@ import java.util.List;
 import com.tfcaielastic.dto.AccidentDTO;
 import com.tfcaielastic.dto.CommonDTO;
 import com.tfcaielastic.dto.DistanceDTO;
+import com.tfcaielastic.dto.Point;
 
 public interface IAccidentService {
 
@@ -15,4 +16,6 @@ public interface IAccidentService {
 	public List<AccidentDTO> getAccidentsByLocation(double lat, double lon, double ratio);
 	
 	public List<DistanceDTO> getAccidentsByAverageDistance();
+	
+	public List<Point> getAccidentsByDangerousPoints1(double ratio, List<Point> points);
 }
