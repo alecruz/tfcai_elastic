@@ -21,6 +21,7 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
 import org.elasticsearch.search.aggregations.bucket.terms.Terms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms.Bucket;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,8 @@ import com.tfcaielastic.dto.AccidentDTO;
 import com.tfcaielastic.dto.CommonDTO;
 import com.tfcaielastic.dto.DistanceDTO;
 import com.tfcaielastic.dto.Feature;
-import com.tfcaielastic.dto.Point;
+import com.tfcaielastic.dto.Point2DTO;
+import com.tfcaielastic.dto.PointDTO;
 import com.tfcaielastic.repository.AccidentRepository;
 import com.tfcaielastic.services.IAccidentService;
 
@@ -124,7 +126,7 @@ public class AccidentService implements IAccidentService {
 		return result;
 	}
 		
-	public List<Point> getAccidentsByDangerousPoints1(double ratio, List<Point> points) {	
+	public List<PointDTO> getAccidentsByDangerousPoints1(double ratio, List<PointDTO> points) {	
 		
 		try {
 			SearchRequest searchRequest;
@@ -132,7 +134,7 @@ public class AccidentService implements IAccidentService {
 			GeoDistanceQueryBuilder qb;
 			BoolQueryBuilder boolQueryBuilder;
 			
-			for(Point p: points) {
+			for(PointDTO p: points) {
 				
 				searchRequest = new SearchRequest();
 				searchSourceBuilder = new SearchSourceBuilder();
@@ -164,6 +166,36 @@ public class AccidentService implements IAccidentService {
 		}
 		
 		return null;
+	}
+	
+	public Point2DTO getAccidentsByDangerousPoints2() {	
+		Point2DTO points = new Point2DTO();
+		try {
+			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();	
+			
+			//Creo la agregacion para agrupar por el campo new_location y mostrar solo los primeros resultados
+			searchSourceBuilder.aggregation(AggregationBuilders.terms("dangerous_points").field("new_location.keyword").minDocCount(1).size(5));
+			
+			SearchRequest searchRequest = new SearchRequest();
+			searchRequest.source(searchSourceBuilder);
+			
+			//Realizo la consulta
+			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
+			
+			//Obtengo los resultados de la agregacion
+			Aggregations aggregations = searchResponse.getAggregations();
+			Terms terms = aggregations.get("dangerous_points");
+			
+			//Agrego a la lista los cinco puntos mas peligrosos
+			for(Bucket b : terms.getBuckets()) {			
+				points.getDangerous_points().add(new Feature(b.getKeyAsString(), b.getDocCount()));
+			}
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}	
+		
+		return points;
 	}
 	
 	@Override

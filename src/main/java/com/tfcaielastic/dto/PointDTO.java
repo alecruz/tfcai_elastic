@@ -1,6 +1,6 @@
 package com.tfcaielastic.dto;
 
-public class Point implements Comparable<Point>{
+public class PointDTO implements Comparable<PointDTO>{
 
 	private String name;	
 	
@@ -10,7 +10,7 @@ public class Point implements Comparable<Point>{
 	
 	private int accidents;
 	
-	public Point(String name, double lat, double lon, int accidents) {
+	public PointDTO(String name, double lat, double lon, int accidents) {
 		this.setName(name);
 		this.setLat(lat);
 		this.setLon(lon);
@@ -49,8 +49,8 @@ public class Point implements Comparable<Point>{
 		this.accidents = accidents;
 	}
 
-	public int compareTo(Point comparestu) {
-        int compareaccidents=((Point)comparestu).getAccidents();
+	public int compareTo(PointDTO comparestu) {
+        int compareaccidents=((PointDTO)comparestu).getAccidents();
         return compareaccidents-this.accidents;
     }
 	

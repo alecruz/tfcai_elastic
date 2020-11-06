@@ -14,7 +14,7 @@ public class AccidentRequestDTO {
 	
 	private double ratio;
 	
-	private List<Point> points;
+	private List<PointDTO> points;
 	
 	public String getDesde() {
 		return desde;
@@ -56,11 +56,11 @@ public class AccidentRequestDTO {
 		this.ratio = ratio;
 	}	
 	
-	public List<Point> getPoints() {
+	public List<PointDTO> getPoints() {
 		return points;
 	}
 
-	public void setPoints(List<Point> points) {
+	public void setPoints(List<PointDTO> points) {
 		this.points = points;
 	}
 	
