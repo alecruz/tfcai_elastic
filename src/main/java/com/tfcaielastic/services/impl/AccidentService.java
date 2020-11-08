@@ -210,7 +210,7 @@ public class AccidentService implements IAccidentService {
 			SearchRequest searchRequest = new SearchRequest();
 			searchSourceBuilder.size(3000000);	
 			searchRequest.indices("accidentes");
-			searchRequest.source(searchSourceBuilder);			
+			searchRequest.source(searchSourceBuilder);	
 			
 			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 			
