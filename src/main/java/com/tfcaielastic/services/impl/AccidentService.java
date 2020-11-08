@@ -60,6 +60,8 @@ public class AccidentService implements IAccidentService {
 		CommonDTO common = new CommonDTO();
 		try {
 			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();	
+			
+			//Creo las agregaciones para los 3 campos
 			searchSourceBuilder.aggregation(AggregationBuilders.terms("weather_condition").field("Weather_Condition.keyword"));
 			searchSourceBuilder.aggregation(AggregationBuilders.terms("city").field("City.keyword"));
 			searchSourceBuilder.aggregation(AggregationBuilders.terms("state").field("State.keyword"));
@@ -67,8 +69,10 @@ public class AccidentService implements IAccidentService {
 			SearchRequest searchRequest = new SearchRequest();
 			searchRequest.source(searchSourceBuilder);
 			
+			//Eejecuto la consulta
 			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 			
+			//Obtengo el resultado de las agregaciones y los asigno al objeto Common
 			Aggregations aggregations = searchResponse.getAggregations();
 			Terms terms = aggregations.get("weather_condition");
 			common.setWeather_condition(new Feature(terms.getBuckets().get(0).getKeyAsString(), terms.getBuckets().get(0).getDocCount()));
@@ -94,11 +98,13 @@ public class AccidentService implements IAccidentService {
 			SearchRequest searchRequest = new SearchRequest();
 			SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 			
+			//Creo la consulta de geolocalizacion"
 			GeoDistanceQueryBuilder qb = QueryBuilders
 					  .geoDistanceQuery("start_location")
 					  .point(lat, lon)
 					  .distance(ratio, DistanceUnit.KILOMETERS);
 			
+			//Armo la consulta y le agrego como filtro la consulta de geolocalizaion
 			BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery().must(QueryBuilders.matchAllQuery()).filter(qb);
 										
 			searchSourceBuilder.query(boolQueryBuilder);
@@ -108,6 +114,7 @@ public class AccidentService implements IAccidentService {
 			
 			SearchResponse searchResponse = client.search(searchRequest, RequestOptions.DEFAULT);
 			
+			//Recorro la colecion con los resultados, armo el objeto que contiene los datos a mostrar y los agrego a una coleccion
 			AccidentDTO accident;
 			for (SearchHit sh : searchResponse.getHits().getHits()) {	
 				accident = new AccidentDTO();
@@ -139,7 +146,7 @@ public class AccidentService implements IAccidentService {
 				searchRequest = new SearchRequest();
 				searchSourceBuilder = new SearchSourceBuilder();
 				
-				//Consulta para la geolocalziación
+				//Consulta para la geolocalización
 				qb = QueryBuilders.geoDistanceQuery("start_location").point(p.getLat(), p.getLon()).distance(ratio, DistanceUnit.KILOMETERS);
 				
 				//Creo la consulta con el filtro de la geolocalizacion

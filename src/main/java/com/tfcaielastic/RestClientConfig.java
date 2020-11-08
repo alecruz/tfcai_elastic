@@ -25,19 +25,7 @@ public class RestClientConfig {
         );
 
         RestHighLevelClient client = new RestHighLevelClient(builder);
-        return client;
-		
-		
-		
-		
-        /*ClientConfiguration clientConfiguration 
-            = ClientConfiguration.builder()
-                .connectedTo("localhost:9200")
-                .build();
-       
-        
-        
-        return RestClients.create(clientConfiguration).rest();*/
+        return client;		
     }
  
     @Bean
